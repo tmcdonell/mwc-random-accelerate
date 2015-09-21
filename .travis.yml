@@ -1,0 +1,72 @@
+language: haskell
+sudo: false
+
+matrix:
+  include:
+    - env:
+        GHC=7.8.4
+        URL_ACCELERATE=https://github.com/AccelerateHS/accelerate.git
+        SHA_ACCELERATE=15aedff344232893c89e513c1caf4bcf699a2b86
+    - env:
+        GHC=7.10.2
+        CABAL=1.22
+        URL_ACCELERATE=https://github.com/AccelerateHS/accelerate.git
+        SHA_ACCELERATE=15aedff344232893c89e513c1caf4bcf699a2b86
+      addons:
+        apt:
+          sources:
+            - hvr-ghc
+          packages:
+            - cabal-install-${CABAL}
+            - ghc-${GHC}
+
+cache:
+  directories:
+    - $HOME/.ghc
+    - $HOME/.cabal/bin
+    - $HOME/.cabal/lib
+    - $HOME/.cabal/share
+    - $HOME/.cabal/install-plan
+
+before_install:
+    # - export PATH=/opt/alex/${ALEX}/bin:${PATH}
+    # - export PATH=/opt/happy/${HAPPY}/bin:${PATH}
+    - export PATH=/opt/cabal/${CABAL}/bin:${PATH}
+    - export PATH=/opt/ghc/${GHC}/bin:${PATH}           # hvr-installed versions
+    - export PATH=/usr/local/ghc/${GHC}/bin:${PATH}     # system installed versions
+    # - export PATH=/usr/lib/llvm-${LLVM}/bin:${PATH}
+
+install:
+    # Due to GHC#9221 parallel builds can result in longer build times
+    - sed -i 's/^jobs:/-- jobs:/' ${HOME}/.cabal/config
+
+    - which ghc;   echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
+    - which cabal; cabal --version
+    # - which alex;  alex --version
+    # - which happy; happy --version
+
+    - .travis/install_dependencies.sh
+
+script:
+    # Check the build
+    - cabal configure -v2 -flib-Werror ${MODE}
+    - cabal build
+    - cabal haddock
+#    - cabal test --show-details=always
+
+    # Check the source distribution can be generated, built, and installed
+    - cabal sdist
+    - |
+        export SRC_TGZ=$(cabal info . | awk '{print $2 ".tar.gz";exit}')
+        cd dist
+        if [ -f "$SRC_TGZ" ]; then
+            cabal install --force-reinstalls ${MODE} ${SRC_TGZ} || exit 1
+        else
+            echo "'$SRC_TGZ': not found"
+            exit 1
+        fi
+
+
+after_failure:
+    - dmesg
+
