@@ -4,11 +4,14 @@ sudo: false
 # NOTE: travis won't let us expand variables in the addons section ):
 matrix:
   include:
-    - env:
+    - compiler: "GHC 7.8.4"
+      env:
         GHC=7.8.4
         URL_ACCELERATE=https://github.com/AccelerateHS/accelerate.git
         SHA_ACCELERATE=15aedff344232893c89e513c1caf4bcf699a2b86
-    - env:
+
+    - compiler: "GHC 7.10.2"
+      env:
         GHC=7.10.2
         CABAL=1.22
         URL_ACCELERATE=https://github.com/AccelerateHS/accelerate.git
