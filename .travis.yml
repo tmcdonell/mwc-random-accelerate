@@ -26,12 +26,9 @@ cache:
     - $HOME/.cabal-snapshot
 
 before_install:
-    # - export PATH=/opt/alex/${ALEX}/bin:${PATH}
-    # - export PATH=/opt/happy/${HAPPY}/bin:${PATH}
-    - export PATH=/opt/cabal/${CABAL}/bin:${PATH}
-    - export PATH=/opt/ghc/${GHC}/bin:${PATH}           # hvr-installed versions
-    - export PATH=/usr/local/ghc/${GHC}/bin:${PATH}     # system installed versions
-    # - export PATH=/usr/lib/llvm-${LLVM}/bin:${PATH}
+    - export PATH=/opt/cabal/${CABAL}/bin:${PATH}       # hvr-installed cabal
+    - export PATH=/opt/ghc/${GHC}/bin:${PATH}           # hvr-installed ghc
+    - export PATH=/usr/local/ghc/${GHC}/bin:${PATH}     # system installed ghc
 
 install:
     # Due to GHC#9221 parallel builds can result in longer build times
