@@ -28,15 +28,26 @@ cat install-plan
 # Check if the install plan matches the cached cabal snapshot
 # -----------------------------------------------------------
 
-if diff -u install-plan $HOME/.cabal/install-plan; then
+if diff -u install-plan $HOME/.cabal-snapshot/install-plan; then
     echo "Using cabal cache"
+    rm -rf $HOME/.ghc
+    cp -a $HOME/.cabal-snapshot/ghc $HOME/.ghc
+    cp -a $HOME/.cabal-snapshot/bin $HOME/.cabal/
+    cp -a $HOME/.cabal-snapshot/lib $HOME/.cabal/
+    cp -a $HOME/.cabal-snapshot/share $HOME/.cabal/
 else
     echo "Rebuilding cabal cache"
-    rm -rf $HOME/.ghc
-    rm -rf $HOME/.cabal/bin
+    rm -rf $HOME/.cabal-snapshot
 
     cabal install --enable-tests --enable-benchmarks --only-dependencies deps/* . ${MODE}
     cabal install --enable-tests --enable-benchmarks deps/*
+
+    # make a snapshot of the cabal directory
+    mkdir $HOME/.cabal-snapshot
+    cp -a $HOME/.ghc $HOME/.cabal-snapshot/ghc
+    cp -a $HOME/.cabal/bin $HOME/.cabal-snapshot/
+    cp -a $HOME/.cabal/lib $HOME/.cabal-snapshot/
+    cp -a $HOME/.cabal/share $HOME/.cabal-snapshot/
+    cp -a install-plan $HOME/.cabal-snapshot/
 fi
-mv install-plan $HOME/install-plan
 
