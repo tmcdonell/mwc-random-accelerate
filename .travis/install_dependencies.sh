@@ -20,7 +20,7 @@ fetch accelerate ${URL_ACCELERATE} ${SHA_ACCELERATE}
 # Create an install plan
 # ----------------------
 
-cabal install --enable-tests --enable-benchmarks --only-dependencies deps/* . ${MODE} > install-plan
+cabal install --enable-tests --enable-benchmarks --only-dependencies --verbose deps/* . ${MODE} > install-plan
 sed -i -e '1,/^Resolving /d' install-plan
 cat install-plan
 
@@ -34,9 +34,6 @@ else
     echo "Rebuilding cabal cache"
     rm -rf $HOME/.ghc
     rm -rf $HOME/.cabal/bin
-    rm -rf $HOME/.cabal/lib
-    rm -rf $HOME/.cabal/share
-    rm -f  $HOME/.cabal/install-plan
 
     cabal install --enable-tests --enable-benchmarks --only-dependencies deps/* . ${MODE}
     cabal install --enable-tests --enable-benchmarks deps/*

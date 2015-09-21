@@ -24,10 +24,11 @@ matrix:
 cache:
   directories:
     - $HOME/.ghc
-    - $HOME/.cabal/bin
-    - $HOME/.cabal/lib
-    - $HOME/.cabal/share
-    - $HOME/.cabal/install-plan
+    - $HOME/.cabal
+
+before_cache:
+    - rm -rf $HOME/.cabal/logs
+    - rm -rf $HOME/.cabal/packages
 
 before_install:
     # - export PATH=/opt/alex/${ALEX}/bin:${PATH}
