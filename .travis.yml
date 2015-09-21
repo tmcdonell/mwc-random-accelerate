@@ -1,16 +1,24 @@
-language: haskell
+language: c
 sudo: false
 
 # NOTE: travis won't let us expand variables in the addons section ):
 matrix:
   include:
-    - compiler: ": #GHC 7.8.4"
+    - compiler: "GHC 7.8.4"
       env:
         GHC=7.8.4
+        CABAL=1.18
         URL_ACCELERATE=https://github.com/AccelerateHS/accelerate.git
         SHA_ACCELERATE=15aedff344232893c89e513c1caf4bcf699a2b86
+      addons:
+        apt:
+          sources:
+            - hvr-ghc
+          packages:
+            - cabal-install-1.18
+            - ghc-7.8.4
 
-    - compiler: ": #GHC 7.10.2"
+    - compiler: "GHC 7.10.2"
       env:
         GHC=7.10.2
         CABAL=1.22
@@ -29,18 +37,16 @@ cache:
     - $HOME/.cabal-snapshot
 
 before_install:
+    - unset CC
     - export PATH=/opt/cabal/${CABAL}/bin:${PATH}       # hvr-installed cabal
     - export PATH=/opt/ghc/${GHC}/bin:${PATH}           # hvr-installed ghc
-    - export PATH=/usr/local/ghc/${GHC}/bin:${PATH}     # system installed ghc
 
 install:
-    # Due to GHC#9221 parallel builds can result in longer build times
+    - cabal update
     - sed -i 's/^jobs:/-- jobs:/' ${HOME}/.cabal/config
 
-    - which -a ghc;   echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
-    - which -a cabal; cabal --version
-    # - which -a alex;  alex --version
-    # - which -a happy; happy --version
+    - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
+    - cabal --version
 
     - .travis/install_dependencies.sh
 
