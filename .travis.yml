@@ -1,6 +1,7 @@
 language: haskell
 sudo: false
 
+# NOTE: travis won't let us expand variables in the addons section ):
 matrix:
   include:
     - env:
@@ -17,8 +18,8 @@ matrix:
           sources:
             - hvr-ghc
           packages:
-            - cabal-install-$CABAL
-            - ghc-$GHC
+            - cabal-install-1.22
+            - ghc-7.10.2
 
 cache:
   directories:
