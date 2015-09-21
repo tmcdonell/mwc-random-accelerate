@@ -14,7 +14,7 @@ module Data.Array.Accelerate.System.Random.MWC (
   -- * Generating random arrays
   (:~>),
   uniform, uniformR,
-  randomArray, randomArrayWithSeed, randomArrayWithSystemRandom,
+  randomArray, randomArrayWith,
 
   -- * Re-exporting MWC-Random
   module System.Random.MWC,
@@ -45,54 +45,31 @@ uniformR :: (Shape sh, Elt e, Variate e) => (e, e) -> sh :~> e
 uniformR bounds _ = R.uniformR bounds
 
 
--- | Generate an array of random values using the supplied generator function.
---   The generator for variates is initialised with a fixed seed.
+-- | Generate an array of random values. The generator for variates is
+-- initialised with a fixed seed.
 --
-randomArray :: (Shape sh, Elt e) => sh :~> e -> sh -> Array sh e
+randomArray :: (Shape sh, Elt e) => sh :~> e -> sh -> IO (Array sh e)
 randomArray f sh
-  = let
-        (adata, _)      = runArrayData $ do
-                            gen <- create
-                            arr <- runRandomArray f sh gen
-                            return (arr, undefined)
-    in
-    adata `seq` Array (fromElt sh) adata
+  = do
+      gen <- create
+      randomArrayWith gen f sh
 
 
--- | Generate an array of random values using a supplied generator function and
---   seed value.
+-- | Generate an array of random values using the supplied generator.
 --
-randomArrayWithSeed :: (Shape sh, Elt e) => Seed -> sh :~> e -> sh -> Array sh e
-randomArrayWithSeed seed f sh
-  = let
-        (adata, _)      = runArrayData $ do
-                            gen <- restore seed
-                            arr <- runRandomArray f sh gen
-                            return (arr, undefined)
-    in
-    adata `seq` Array (fromElt sh) adata
-
-
--- | Generate an array of random values using a supplied generator function,
---   initialised with the system's source of pseudo-random numbers
---   ("/dev/urandom" on Unix-like systems).
---
-randomArrayWithSystemRandom
-    :: forall sh e. (Shape sh, Elt e)
-    => sh :~> e
+randomArrayWith
+    :: (Shape sh, Elt e)
+    => GenIO
+    -> sh :~> e
     -> sh
     -> IO (Array sh e)
-randomArrayWithSystemRandom f sh
-  = withSystemRandom . asGenIO $ \gen ->
-      let
-          (adata, _) = runArrayData $ do
-                         arr <- runRandomArray f sh gen
-                         return (arr, undefined)
-      in
-      adata `seq` return (Array (fromElt sh) adata)
+randomArrayWith gen f sh
+  = do
+      adata  <- runRandomArray f sh gen
+      return $! Array (fromElt sh) adata
 
 
--- Common function to create a mutable array and fill it with random values
+-- Create a mutable array and fill it with random values
 --
 runRandomArray
     :: (Shape sh, Elt e)
@@ -105,7 +82,7 @@ runRandomArray f sh gen
       arr <- newArrayData $! Sugar.size sh
       let write ix = unsafeWriteArrayData arr (Sugar.toIndex sh ix)
                    . fromElt =<< f ix gen
-
+      --
       iter sh write (>>) (return ())
       return arr
 
