@@ -38,6 +38,7 @@ if diff -u install-plan $HOME/.cabal-snapshot/install-plan; then
 else
     echo "Rebuilding cabal cache"
     rm -rf $HOME/.cabal-snapshot
+    mkdir -p $HOME/.ghc $HOME/.cabal/bin $HOME/.cabal/lib $HOME/.cabal/share
 
     cabal install --enable-tests --enable-benchmarks --only-dependencies deps/* . ${MODE}
     cabal install --enable-tests --enable-benchmarks deps/*
