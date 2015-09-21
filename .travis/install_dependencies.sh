@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -x
+# echo commands, exit immediately on error
+set -xe
 
 # Fetch git dependencies
 # ----------------------
