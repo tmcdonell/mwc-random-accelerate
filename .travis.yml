@@ -1,4 +1,4 @@
-language: haskell
+language: c
 sudo: false
 
 # NOTE: travis won't let us expand variables in the addons section ):
@@ -26,6 +26,7 @@ cache:
     - $HOME/.cabal-snapshot
 
 before_install:
+    - unset CC
     - export PATH=/opt/cabal/${CABAL}/bin:${PATH}       # hvr-installed cabal
     - export PATH=/opt/ghc/${GHC}/bin:${PATH}           # hvr-installed ghc
     - export PATH=/usr/local/ghc/${GHC}/bin:${PATH}     # system installed ghc
