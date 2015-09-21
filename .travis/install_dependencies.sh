@@ -20,7 +20,7 @@ fetch accelerate ${URL_ACCELERATE} ${SHA_ACCELERATE}
 # Create an install plan
 # ----------------------
 
-cabal install --enable-tests --enable-benchmarks --only-dependencies --verbose deps/* . ${MODE} > install-plan
+cabal install --enable-tests --enable-benchmarks --only-dependencies --verbose --dry-run deps/* . ${MODE} > install-plan
 sed -i -e '1,/^Resolving /d' install-plan
 cat install-plan
 
