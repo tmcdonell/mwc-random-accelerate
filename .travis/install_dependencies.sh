@@ -36,9 +36,10 @@ else
     rm -rf $HOME/.cabal/bin
     rm -rf $HOME/.cabal/lib
     rm -rf $HOME/.cabal/share
-    mv install-plan $HOME/install-plan
+    rm -f  $HOME/.cabal/install-plan
 
     cabal install --enable-tests --enable-benchmarks --only-dependencies deps/* . ${MODE}
     cabal install --enable-tests --enable-benchmarks deps/*
 fi
+mv install-plan $HOME/install-plan
 
