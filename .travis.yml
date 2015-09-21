@@ -17,8 +17,8 @@ matrix:
           sources:
             - hvr-ghc
           packages:
-            - cabal-install-${CABAL}
-            - ghc-${GHC}
+            - cabal-install-$CABAL
+            - ghc-$GHC
 
 cache:
   directories:
@@ -40,10 +40,10 @@ install:
     # Due to GHC#9221 parallel builds can result in longer build times
     - sed -i 's/^jobs:/-- jobs:/' ${HOME}/.cabal/config
 
-    - which ghc;   echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
-    - which cabal; cabal --version
-    # - which alex;  alex --version
-    # - which happy; happy --version
+    - which -a ghc;   echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
+    - which -a cabal; cabal --version
+    # - which -a alex;  alex --version
+    # - which -a happy; happy --version
 
     - .travis/install_dependencies.sh
 
