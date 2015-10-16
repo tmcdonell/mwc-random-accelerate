@@ -16,7 +16,7 @@ module Data.Array.Accelerate.System.Random.MWC (
   uniform, uniformR,
   randomArray, randomArrayWith,
 
-  -- * Re-exporting MWC-Random
+  -- * Re-export MWC-Random
   module System.Random.MWC,
 
 ) where
@@ -29,7 +29,7 @@ import Data.Array.Accelerate.Array.Data         as A
 import Data.Array.Accelerate.Array.Sugar        as Sugar
 
 
--- | A PNRG from indices to variates
+-- | A PRNG from indices to variates
 --
 type sh :~> e = sh -> GenIO -> IO e
 
