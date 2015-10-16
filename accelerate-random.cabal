@@ -26,6 +26,12 @@ library
 
   build-depends:
       base                      >= 4.7 && < 4.9
-    , accelerate                >= 0.15
+    , accelerate                == 0.15.*
     , mwc-random                >= 0.8
+
+Source-repository this
+  type:                 git
+  location:             git://github.com/tmcdonell/accelerate-random.git
+  branch:               release/0.15
+  tag:                  0.15.0.0
 
