@@ -1,6 +1,6 @@
 {-# LANGUAGE RankNTypes    #-}
 {-# LANGUAGE TypeOperators #-}
--- Module:      : Data.Array.Accelerate.System.Random.MWC
+-- Module:      : Data.Array.Accelerate.System.Random.SFMT
 -- Copyright    : [2014..2015] Trevor L. McDonell
 -- License      : BSD3
 --
@@ -8,23 +8,23 @@
 -- Stability    : experimental
 -- Portability  : non-portable (GHC extensions)
 --
--- Random number generation backed by MWC.
+-- Random number generation backed by SMFT.
 --
 
-module Data.Array.Accelerate.System.Random.MWC (
+module Data.Array.Accelerate.System.Random.SFMT (
 
   -- * Generating random arrays
   (:~>),
   uniform, uniformR,
   randomArray, randomArrayWith,
 
-  -- * Re-export MWC-Random
-  module System.Random.MWC,
+  -- * Re-export SFMT-Random
+  module System.Random.SFMT,
 
 ) where
 
-import System.Random.MWC                        hiding ( uniform, uniformR )
-import qualified System.Random.MWC              as R
+import System.Random.SFMT                       hiding ( uniform, uniformR )
+import qualified System.Random.SFMT             as R
 
 import Data.Array.Accelerate                    as A
 import Data.Array.Accelerate.Array.Data         as A
