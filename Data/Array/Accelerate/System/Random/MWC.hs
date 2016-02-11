@@ -36,11 +36,13 @@ type sh :~> e = sh -> GenIO -> IO e
 
 -- | Uniformly distributed random variates.
 --
+{-# INLINE uniform #-}
 uniform :: (Shape sh, Elt e, Variate e) => sh :~> e
 uniform _ = R.uniform
 
 -- | Uniformly distributed random variates in a given range.
 --
+{-# INLINE uniformR #-}
 uniformR :: (Shape sh, Elt e, Variate e) => (e, e) -> sh :~> e
 uniformR bounds _ = R.uniformR bounds
 
@@ -48,6 +50,7 @@ uniformR bounds _ = R.uniformR bounds
 -- | Generate an array of random values. The generator for variates is
 -- initialised with a fixed seed.
 --
+{-# INLINE randomArray #-}
 randomArray :: (Shape sh, Elt e) => sh :~> e -> sh -> IO (Array sh e)
 randomArray f sh
   = do
@@ -57,6 +60,7 @@ randomArray f sh
 
 -- | Generate an array of random values using the supplied generator.
 --
+{-# INLINE randomArrayWith #-}
 randomArrayWith
     :: (Shape sh, Elt e)
     => GenIO
@@ -71,6 +75,7 @@ randomArrayWith gen f sh
 
 -- Create a mutable array and fill it with random values
 --
+{-# INLINE runRandomArray #-}
 runRandomArray
     :: (Shape sh, Elt e)
     => sh :~> e
