@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns  #-}
 {-# LANGUAGE RankNTypes    #-}
 {-# LANGUAGE TypeOperators #-}
 -- Module:      : Data.Array.Accelerate.System.Random.MWC
@@ -87,9 +88,13 @@ runRandomArray
 runRandomArray f sh gen
   = do
       arr <- newArrayData $! Sugar.size sh
-      let write ix = unsafeWriteArrayData arr (Sugar.toIndex sh ix)
-                   . fromElt =<< f ix gen
+      let !n            = Sugar.size sh
+          write !i
+            | i >= n    = return ()
+            | otherwise = do
+                unsafeWriteArrayData arr i . fromElt =<< f (Sugar.fromIndex sh i) gen
+                write (i+1)
       --
-      iter sh write (>>) (return ())
+      write 0
       return arr
 
