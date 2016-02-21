@@ -9,6 +9,7 @@ import Data.Array.Accelerate.System.Random.MWC          as AMWC
 import Data.Array.Accelerate.System.Random.SFMT         as ASFMT
 import System.Random.MWC                                as MWC
 import System.Random.SFMT                               as SFMT
+import System.Random.Mersenne                           as MT
 import Data.Vector.Unboxed                              as U
 
 import Criterion.Main
@@ -46,17 +47,36 @@ main :: IO ()
 main = do
   mwc  <- MWC.create
   sfmt <- SFMT.create
+  mt   <- MT.getStdGen
 
   defaultMain
+    -- One letter group names are used so they will fit on the plot.
+    --
+    --  U - uniform
+    --  R - uniformR
+    --  D - distribution
+    --
+    [ bgroup "mersenne-random"
+      [ bgroup "U"
+        [ bench "Double"  (whnfIO (MT.random mt :: IO Double))
+        , bench "Int"     (whnfIO (MT.random mt :: IO Int))
+        , bench "Int8"    (whnfIO (MT.random mt :: IO Int8))
+        , bench "Int16"   (whnfIO (MT.random mt :: IO Int16))
+        , bench "Int32"   (whnfIO (MT.random mt :: IO Int32))
+        , bench "Int64"   (whnfIO (MT.random mt :: IO Int64))
+        , bench "Word"    (whnfIO (MT.random mt :: IO Word))
+        , bench "Word8"   (whnfIO (MT.random mt :: IO Word8))
+        , bench "Word16"  (whnfIO (MT.random mt :: IO Word16))
+        , bench "Word32"  (whnfIO (MT.random mt :: IO Word32))
+        , bench "Word64"  (whnfIO (MT.random mt :: IO Word64))
+        ]
+      ]
+
     -- stolen from MWC random benchmark suite
-    [ bgroup "MWC"
-      -- One letter group names are used so they will fit on the plot.
-      --
-      --  U - uniform
-      --  R - uniformR
-      --  D - distribution
+    , bgroup "mwc-random"
       [ bgroup "U"
         [ bench "Double"  (whnfIO (MWC.uniform mwc :: IO Double))
+        , bench "Float"   (whnfIO (MWC.uniform mwc :: IO Float))
         , bench "Int"     (whnfIO (MWC.uniform mwc :: IO Int))
         , bench "Int8"    (whnfIO (MWC.uniform mwc :: IO Int8))
         , bench "Int16"   (whnfIO (MWC.uniform mwc :: IO Int16))
@@ -72,6 +92,7 @@ main = do
         -- I'm not entirely convinced that this is right way to test
         -- uniformR. /A.Khudyakov/
         [ bench "Double"  (whnfIO (MWC.uniformR (-3.21,26) mwc :: IO Double))
+        , bench "Float"   (whnfIO (MWC.uniformR (-3.21,26) mwc :: IO Float))
         , bench "Int"     (whnfIO (MWC.uniformR (-12,679)  mwc :: IO Int))
         , bench "Int8"    (whnfIO (MWC.uniformR (-12,4)    mwc :: IO Int8))
         , bench "Int16"   (whnfIO (MWC.uniformR (-12,679)  mwc :: IO Int16))
@@ -86,6 +107,7 @@ main = do
       , bgroup "vector"
         [ bgroup "U"
           [ bench "Double"  (makeVector mwc (Proxy :: Proxy Double))
+          , bench "Float"   (makeVector mwc (Proxy :: Proxy Float))
           , bench "Int"     (makeVector mwc (Proxy :: Proxy Int))
           , bench "Int8"    (makeVector mwc (Proxy :: Proxy Int8))
           , bench "Int16"   (makeVector mwc (Proxy :: Proxy Int16))
@@ -101,6 +123,7 @@ main = do
       , bgroup "Acc"
         [ bgroup "U"
           [ bench "Double"  (makeMWCArray mwc (AMWC.uniform :: DIM1 AMWC.:~> Double))
+          , bench "Float"   (makeMWCArray mwc (AMWC.uniform :: DIM1 AMWC.:~> Float))
           , bench "Int"     (makeMWCArray mwc (AMWC.uniform :: DIM1 AMWC.:~> Int))
           , bench "Int8"    (makeMWCArray mwc (AMWC.uniform :: DIM1 AMWC.:~> Int8))
           , bench "Int16"   (makeMWCArray mwc (AMWC.uniform :: DIM1 AMWC.:~> Int16))
@@ -114,6 +137,7 @@ main = do
           ]
         , bgroup "R"
           [ bench "Double"  (makeMWCArray mwc (AMWC.uniformR (-3.21,26) :: DIM1 AMWC.:~> Double))
+          , bench "Float"   (makeMWCArray mwc (AMWC.uniformR (-3.21,26) :: DIM1 AMWC.:~> Float))
           , bench "Int"     (makeMWCArray mwc (AMWC.uniformR (-12,679)  :: DIM1 AMWC.:~> Int))
           , bench "Int8"    (makeMWCArray mwc (AMWC.uniformR (-12,4)    :: DIM1 AMWC.:~> Int8))
           , bench "Int16"   (makeMWCArray mwc (AMWC.uniformR (-12,679)  :: DIM1 AMWC.:~> Int16))
@@ -129,9 +153,10 @@ main = do
       ]
 
     -- SFMT
-    , bgroup "SFMT"
+    , bgroup "sfmt"
       [ bgroup "U"
         [ bench "Double"  (whnfIO (SFMT.uniform sfmt :: IO Double))
+        , bench "Float"   (whnfIO (SFMT.uniform sfmt :: IO Float))
         , bench "Int"     (whnfIO (SFMT.uniform sfmt :: IO Int))
         , bench "Int8"    (whnfIO (SFMT.uniform sfmt :: IO Int8))
         , bench "Int16"   (whnfIO (SFMT.uniform sfmt :: IO Int16))
@@ -145,6 +170,7 @@ main = do
         ]
       , bgroup "R"
         [ bench "Double"  (whnfIO (SFMT.uniformR (-3.21,26) sfmt :: IO Double))
+        , bench "Float"   (whnfIO (SFMT.uniformR (-3.21,26) sfmt :: IO Float))
         , bench "Int"     (whnfIO (SFMT.uniformR (-12,679)  sfmt :: IO Int))
         , bench "Int8"    (whnfIO (SFMT.uniformR (-12,4)    sfmt :: IO Int8))
         , bench "Int16"   (whnfIO (SFMT.uniformR (-12,679)  sfmt :: IO Int16))
@@ -159,6 +185,7 @@ main = do
       , bgroup "Acc"
         [ bgroup "U"
           [ bench "Double"  (makeSFMTArray sfmt (ASFMT.uniform :: DIM1 ASFMT.:~> Double))
+          , bench "Float"   (makeSFMTArray sfmt (ASFMT.uniform :: DIM1 ASFMT.:~> Float))
           , bench "Int"     (makeSFMTArray sfmt (ASFMT.uniform :: DIM1 ASFMT.:~> Int))
           , bench "Int8"    (makeSFMTArray sfmt (ASFMT.uniform :: DIM1 ASFMT.:~> Int8))
           , bench "Int16"   (makeSFMTArray sfmt (ASFMT.uniform :: DIM1 ASFMT.:~> Int16))
@@ -172,6 +199,7 @@ main = do
           ]
         , bgroup "R"
           [ bench "Double"  (makeSFMTArray sfmt (ASFMT.uniformR (-3.21,26) :: DIM1 ASFMT.:~> Double))
+          , bench "Float"   (makeSFMTArray sfmt (ASFMT.uniformR (-3.21,26) :: DIM1 ASFMT.:~> Float))
           , bench "Int"     (makeSFMTArray sfmt (ASFMT.uniformR (-12,679)  :: DIM1 ASFMT.:~> Int))
           , bench "Int8"    (makeSFMTArray sfmt (ASFMT.uniformR (-12,4)    :: DIM1 ASFMT.:~> Int8))
           , bench "Int16"   (makeSFMTArray sfmt (ASFMT.uniformR (-12,679)  :: DIM1 ASFMT.:~> Int16))
