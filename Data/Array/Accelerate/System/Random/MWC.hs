@@ -1,6 +1,7 @@
 {-# LANGUAGE BangPatterns  #-}
 {-# LANGUAGE RankNTypes    #-}
 {-# LANGUAGE TypeOperators #-}
+-- |
 -- Module:      : Data.Array.Accelerate.System.Random.MWC
 -- Copyright    : [2014..2015] Trevor L. McDonell
 -- License      : BSD3
@@ -51,13 +52,14 @@ uniformR bounds _ = R.uniformR bounds
 
 
 -- | Generate an array of random values. The generator for variates is
--- initialised with a fixed seed.
+-- seeded from the system's fast source of pseudo-random numbers (see:
+-- 'R.createSystemRandom')
 --
 {-# INLINE randomArray #-}
 randomArray :: (Shape sh, Elt e) => sh :~> e -> sh -> IO (Array sh e)
 randomArray f sh
   = do
-      gen <- create
+      gen <- createSystemRandom
       randomArrayWith gen f sh
 
 

@@ -1,6 +1,7 @@
 {-# LANGUAGE BangPatterns  #-}
 {-# LANGUAGE RankNTypes    #-}
 {-# LANGUAGE TypeOperators #-}
+-- |
 -- Module:      : Data.Array.Accelerate.System.Random.SFMT
 -- Copyright    : [2014..2015] Trevor L. McDonell
 -- License      : BSD3
