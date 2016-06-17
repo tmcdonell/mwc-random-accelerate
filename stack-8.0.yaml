@@ -1,0 +1,41 @@
+# For more information, see: https://github.com/commercialhaskell/stack/blob/release/doc/yaml_configuration.md
+# vim: nospell
+
+resolver: nightly-2016-06-06
+
+packages:
+- '.'
+- 'benchmarks'
+
+- location:
+    git:    https://github.com/AccelerateHS/accelerate.git
+    commit: ed0efd5ac4309ef0e0fdad9ba23588df179bf469
+  extra-dep: true
+
+extra-deps:
+- 'mersenne-random-1.0.0.1'
+- 'unique-0'
+
+# Override default flag values for local packages and extra-deps
+flags:
+  mersenne-random:
+    use_sse2: true
+
+# Extra package databases containing global packages
+extra-package-dbs: []
+
+# Control whether we use the GHC we find on the path
+# system-ghc: true
+
+# Require a specific version of stack, using version ranges
+# require-stack-version: -any # Default
+# require-stack-version: >= 0.1.4.0
+
+# Override the architecture used by stack, especially useful on Windows
+# arch: i386
+# arch: x86_64
+
+# Extra directories used by stack for building
+# extra-include-dirs: [/path/to/dir]
+# extra-lib-dirs: [/path/to/dir]
+
