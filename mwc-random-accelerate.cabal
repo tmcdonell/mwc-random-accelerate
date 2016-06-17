@@ -1,6 +1,6 @@
-name:                  accelerate-random
-version:               0.15.0.0
-synopsis:              Generate Accelerate arrays filled with high quality pseudorandom numbers
+name:                   mwc-random-accelerate
+version:                0.15.0.0
+synopsis:               Generate Accelerate arrays filled with high quality pseudorandom numbers
 description:
   Generate /Accelerate/ arrays filled with high-quality pseudorandom numbers.
   .
@@ -9,15 +9,15 @@ description:
   .
 tested-with:            GHC >= 7.8
 
-license:               BSD3
-license-file:          LICENSE
-author:                Trevor L. McDonell
-maintainer:            Trevor L. McDonell <tmcdonell@cse.unsw.edu.au>
+license:                BSD3
+license-file:           LICENSE
+author:                 Trevor L. McDonell
+maintainer:             Trevor L. McDonell <tmcdonell@cse.unsw.edu.au>
 -- copyright:
-category:              Data
-build-type:            Simple
+category:               Data
+build-type:             Simple
 -- extra-source-files:
-cabal-version:         >=1.10
+cabal-version:          >=1.10
 
 library
   default-language:    Haskell2010
@@ -33,5 +33,5 @@ library
 
 Source-repository head
   Type:                 git
-  Location:             git://github.com/tmcdonell/accelerate-random.git
+  Location:             git://github.com/tmcdonell/mwc-random-accelerate.git
 

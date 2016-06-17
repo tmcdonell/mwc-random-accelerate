@@ -1,7 +1,7 @@
 Random number generation for Accelerate
 =======================================
 
-[![Build Status](https://travis-ci.org/tmcdonell/accelerate-random.svg?branch=master)](https://travis-ci.org/tmcdonell/accelerate-random)
+[![Build Status](https://travis-ci.org/tmcdonell/mwc-random-accelerate.svg?branch=master)](https://travis-ci.org/tmcdonell/mwc-random-accelerate)
 
 Generate Accelerate arrays filled with high-quality pseudorandom numbers.
 Currently this is based upon the [mwc-random][mwc-random] package to generate

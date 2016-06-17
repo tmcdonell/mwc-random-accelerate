@@ -18,11 +18,10 @@ executable random-benchmarks
   build-depends:
         base                    >= 4.7 && < 4.10
       , accelerate
-      , accelerate-random
       , criterion
       , mersenne-random
       , mwc-random
-      -- , sfmt
+      , mwc-random-accelerate
       , vector
 
   ghc-options:        -O3 -rtsopts
