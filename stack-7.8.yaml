@@ -9,13 +9,12 @@ packages:
 
 - location:
     git:    https://github.com/AccelerateHS/accelerate.git
-    commit: 2098038b9316e2a5d9bed54c61bf4582469d9e06
+    commit: ed0efd5ac4309ef0e0fdad9ba23588df179bf469
   extra-dep: true
 
 extra-deps:
 - 'base-orphans-0.4.4'
 - 'mersenne-random-1.0.0.1'
-- 'sfmt-0.1.1'
 - 'unique-0'
 
 # Override default flag values for local packages and extra-deps
