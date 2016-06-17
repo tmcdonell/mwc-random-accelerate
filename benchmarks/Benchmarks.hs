@@ -8,7 +8,7 @@ import Data.Array.Accelerate
 import Data.Array.Accelerate.System.Random.MWC          as AMWC
 -- import Data.Array.Accelerate.System.Random.SFMT         as ASFMT
 import System.Random.MWC                                as MWC
-import System.Random.SFMT                               as SFMT
+-- import System.Random.SFMT                               as SFMT
 import System.Random.Mersenne                           as MT
 import Data.Vector.Unboxed                              as U
 
@@ -46,7 +46,7 @@ makeVector mwc _ = Benchmarkable vec
 main :: IO ()
 main = do
   mwc  <- MWC.create
-  sfmt <- SFMT.create
+  -- sfmt <- SFMT.create
   mt   <- MT.getStdGen
 
   defaultMain
