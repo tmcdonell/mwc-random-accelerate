@@ -6,7 +6,7 @@ module Main where
 
 import Data.Array.Accelerate
 import Data.Array.Accelerate.System.Random.MWC          as AMWC
-import Data.Array.Accelerate.System.Random.SFMT         as ASFMT
+-- import Data.Array.Accelerate.System.Random.SFMT         as ASFMT
 import System.Random.MWC                                as MWC
 import System.Random.SFMT                               as SFMT
 import System.Random.Mersenne                           as MT
@@ -26,13 +26,13 @@ makeMWCArray mwc f = Benchmarkable arr
       !_ <- AMWC.randomArrayWith mwc f (Z :. P.fromIntegral n) :: IO (Array DIM1 e)
       return ()
 
-makeSFMTArray :: forall e. Elt e => SFMT.GenIO -> DIM1 ASFMT.:~> e -> Benchmarkable
-makeSFMTArray sfmt f = Benchmarkable arr
-  where
-    arr :: Int64 -> IO ()
-    arr n = do
-      !_ <- ASFMT.randomArrayWith sfmt f (Z :. P.fromIntegral n) :: IO (Array DIM1 e)
-      return ()
+-- makeSFMTArray :: forall e. Elt e => SFMT.GenIO -> DIM1 ASFMT.:~> e -> Benchmarkable
+-- makeSFMTArray sfmt f = Benchmarkable arr
+--   where
+--     arr :: Int64 -> IO ()
+--     arr n = do
+--       !_ <- ASFMT.randomArrayWith sfmt f (Z :. P.fromIntegral n) :: IO (Array DIM1 e)
+--       return ()
 
 makeVector :: forall e. (MWC.Variate e, Unbox e) => MWC.GenIO -> Proxy e -> Benchmarkable
 makeVector mwc _ = Benchmarkable vec
@@ -152,6 +152,7 @@ main = do
         ]
       ]
 
+{--
     -- SFMT
     , bgroup "sfmt"
       [ bgroup "U"
@@ -213,5 +214,6 @@ main = do
           ]
         ]
       ]
+--}
     ]
 
