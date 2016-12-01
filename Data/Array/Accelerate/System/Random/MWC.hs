@@ -25,6 +25,7 @@ module Data.Array.Accelerate.System.Random.MWC (
 
 ) where
 
+import Prelude                                  as P
 import System.Random.MWC                        hiding ( uniform, uniformR )
 import qualified System.Random.MWC              as R
 
@@ -92,7 +93,7 @@ runRandomArray f sh gen
       arr <- newArrayData $! Sugar.size sh
       let !n            = Sugar.size sh
           write !i
-            | i >= n    = return ()
+            | i P.>= n  = return ()
             | otherwise = do
                 unsafeWriteArrayData arr i . fromElt =<< f (Sugar.fromIndex sh i) gen
                 write (i+1)
