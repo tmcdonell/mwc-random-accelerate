@@ -1,20 +1,19 @@
 # For more information, see: https://github.com/commercialhaskell/stack/blob/release/doc/yaml_configuration.md
 # vim: nospell
 
-resolver: lts-8.0
+resolver: lts-9.0
 
 packages:
 - '.'
 - 'benchmarks'
 
 - location:
-    git:    https://github.com/AccelerateHS/accelerate.git
-    commit: 22d49629ade9b9b8e93985362323b1259155df37
+    git:    https://github.com/tmcdonell/accelerate.git
+    commit: aee5f0232e2cfdcf030e2a7ca0570e9ced017d63
   extra-dep: true
 
 extra-deps:
 - 'mersenne-random-1.0.0.1'
-- 'unique-0'
 
 # Override default flag values for local packages and extra-deps
 flags:
