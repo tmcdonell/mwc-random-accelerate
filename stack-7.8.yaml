@@ -15,6 +15,7 @@ packages:
 extra-deps:
 - 'base-orphans-0.4.4'
 - 'mersenne-random-1.0.0.1'
+- 'th-lift-instances-0.1.11'
 - 'unique-0'
 
 # Override default flag values for local packages and extra-deps
