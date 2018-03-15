@@ -1,4 +1,5 @@
 {-# LANGUAGE BangPatterns        #-}
+{-# LANGUAGE CPP                 #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeOperators       #-}
 
@@ -19,7 +20,7 @@ import Prelude                                          as P
 
 
 makeMWCArray :: forall e. Elt e => MWC.GenIO -> DIM1 AMWC.:~> e -> Benchmarkable
-makeMWCArray mwc f = Benchmarkable arr
+makeMWCArray mwc f = toBenchmarkable arr
   where
     arr :: Int64 -> IO ()
     arr n = do
@@ -35,12 +36,17 @@ makeMWCArray mwc f = Benchmarkable arr
 --       return ()
 
 makeVector :: forall e. (MWC.Variate e, Unbox e) => MWC.GenIO -> Proxy e -> Benchmarkable
-makeVector mwc _ = Benchmarkable vec
+makeVector mwc _ = toBenchmarkable vec
   where
     vec :: Int64 -> IO ()
     vec n = do
       !_ <- MWC.uniformVector mwc (P.fromIntegral n) :: IO (U.Vector e)
       return ()
+
+#if !MIN_VERSION_criterion(1,2,0)
+toBenchmarkable :: (Int64 -> IO ()) -> Benchmarkable
+toBenchmarkable = Benchmarkable
+#endif
 
 
 main :: IO ()

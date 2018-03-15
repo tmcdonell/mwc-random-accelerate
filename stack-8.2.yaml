@@ -1,35 +1,16 @@
 # For more information, see: https://github.com/commercialhaskell/stack/blob/release/doc/yaml_configuration.md
 # vim: nospell
 
-resolver: ghc-8.2
+resolver: lts-10.0
 
 packages:
 - '.'
-# - 'benchmarks'
-
-- location:
-    git:    https://github.com/tmcdonell/accelerate.git
-    commit: aee5f0232e2cfdcf030e2a7ca0570e9ced017d63
-  extra-dep: true
 
 extra-deps:
-- 'base-orphans-0.6'
-- 'exceptions-0.8.3'
-- 'fclabels-2.0.3.2'
-- 'hashable-1.2.6.1'
-- 'hashtables-1.2.1.1'
-- 'math-functions-0.2.1.0'
+- git:    https://github.com/tmcdonell/accelerate.git
+  commit: 0f98ba984efacc22aa2c488de5ad08a513b65ef3
+
 - 'mersenne-random-1.0.0.1'
-- 'mtl-2.2.1'
-- 'mwc-random-0.13.6.0'
-- 'primitive-0.6.2.0'
-- 'stm-2.4.4.1'
-- 'text-1.2.2.2'
-- 'transformers-compat-0.5.1.4'
-- 'unique-0'
-- 'unordered-containers-0.2.8.0'
-- 'vector-0.12.0.1'
-- 'vector-th-unbox-0.2.1.6'
 
 # Override default flag values for local packages and extra-deps
 flags:
@@ -37,11 +18,10 @@ flags:
     use_sse2: true
 
 # Extra global and per-package GHC options
-ghc-options:
-  '*': -fdiagnostics-color=always
+# ghc-options: {}
 
 # Extra package databases containing global packages
-extra-package-dbs: []
+# extra-package-dbs: []
 
 # Control whether we use the GHC we find on the path
 # system-ghc: true
