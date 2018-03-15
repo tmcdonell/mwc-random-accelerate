@@ -5,7 +5,6 @@ resolver: lts-2.22
 
 packages:
 - '.'
-- 'benchmarks'
 
 extra-deps:
 - 'accelerate-1.1.1.0'

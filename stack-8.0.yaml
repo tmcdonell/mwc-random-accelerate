@@ -5,7 +5,6 @@ resolver: lts-9.0
 
 packages:
 - '.'
-- 'benchmarks'
 
 extra-deps:
 - git:    https://github.com/tmcdonell/accelerate.git

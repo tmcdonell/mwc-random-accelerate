@@ -33,6 +33,26 @@ library
     -O2
     -Wall
 
+benchmark bench-random
+  default-language:     Haskell2010
+  type:                 exitcode-stdio-1.0
+  hs-source-dirs:       bench
+  main-is:              Main.hs
+
+  build-depends:
+        base                    >= 4.7 && < 4.12
+      , accelerate
+      , criterion
+      , mersenne-random
+      , mwc-random
+      , mwc-random-accelerate
+      , vector
+
+  ghc-options:
+    -O2
+    -rtsopts
+
+
 source-repository head
   type:                 git
   location:             git://github.com/tmcdonell/mwc-random-accelerate.git
@@ -43,4 +63,3 @@ source-repository this
   location:             git://github.com/tmcdonell/mwc-random-accelerate.git
 
 -- vim: nospell
-

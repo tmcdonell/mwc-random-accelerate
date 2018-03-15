@@ -5,7 +5,6 @@ resolver: ghc-8.4.1
 
 packages:
 - '.'
-- 'benchmarks'
 
 extra-deps:
 - git:    https://github.com/tmcdonell/accelerate.git
