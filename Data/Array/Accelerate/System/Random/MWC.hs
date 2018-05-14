@@ -12,6 +12,54 @@
 --
 -- Random number generation backed by MWC.
 --
+-- [/Example/]
+--
+-- Create a vector of 100 random uniformly distributed floating-point numbers,
+-- where the PRNG is seeded with data from the system's source of pseudo-random
+-- numbers (see 'R.withSystemRandom'):
+--
+-- >>> vs <- randomArray uniform (Z :. 100)           :: IO (Vector Float)
+--
+-- To generate uniformly distributed random variables in the range (-1,1]:
+--
+-- >>> vs <- randomArray (uniformR (-1,1)) (Z:.100)   :: IO (Vector Double)
+--
+-- You can also pass the generator state in explicitly, so that it can be
+-- reused:
+--
+-- >>> gen <- create                                  :: IO GenIO
+-- >>> vs  <- randomArrayWith gen uniform (Z :. 100)  :: IO (Vector Int)
+--
+-- [/Non-uniform distributions/]
+--
+-- If you require random numbers following other distributions, you can combine
+-- this package with the generators from the
+-- <http://hackage.haskell.org/package/random-fu random-fu> package. For
+-- example:
+--
+-- @
+-- import Data.Random                                    hiding ( uniform )
+-- import qualified Data.Random.Distribution.Exponential as R
+-- import qualified Data.Random.Distribution.Poisson     as R
+--
+-- exponential
+--     :: (Distribution StdUniform e, Floating e, Shape sh, Elt e)
+--     => e
+--     -> sh :~> e
+-- exponential beta _sh gen = sampleFrom gen (R.exponential beta)
+--
+-- poisson
+--     :: (Distribution (R.Poisson b) a, Shape sh, Elt a)
+--     => b
+--     -> sh :~> a
+-- poisson lambda _sh gen = sampleFrom gen (R.poisson lambda)
+-- @
+--
+-- Which can then be used as before:
+--
+-- >>> vs <- randomArray (exponential 5) (Z :. 100)   :: IO (Vector Float)
+-- >>> us <- randomArray (poisson 5)     (Z :. 100)   :: IO (Vector Float)
+--
 
 module Data.Array.Accelerate.System.Random.MWC (
 
@@ -20,7 +68,7 @@ module Data.Array.Accelerate.System.Random.MWC (
   uniform, uniformR,
   randomArray, randomArrayWith,
 
-  -- * Re-export MWC-Random
+  -- Re-export MWC-Random
   module System.Random.MWC,
 
 ) where
@@ -90,9 +138,10 @@ runRandomArray
     -> IO (MutableArrayData (EltRepr e))
 runRandomArray f sh gen
   = do
-      arr <- newArrayData $! Sugar.size sh
-      let !n            = Sugar.size sh
-          write !i
+      let n = Sugar.size sh
+      arr  <- newArrayData n
+      --
+      let write !i
             | i P.>= n  = return ()
             | otherwise = do
                 unsafeWriteArrayData arr i . fromElt =<< f (Sugar.fromIndex sh i) gen
