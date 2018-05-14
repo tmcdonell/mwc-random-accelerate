@@ -7,11 +7,10 @@ packages:
 - '.'
 
 extra-deps:
-- git:    https://github.com/tmcdonell/accelerate.git
-  commit: 0f98ba984efacc22aa2c488de5ad08a513b65ef3
-
+- 'accelerate-1.2.0.0'
 - 'cabal-doctest-1.0.6'
 - 'constraints-0.9.1'
+- 'hashtables-1.2.3.0'
 - 'hedgehog-0.5.3'
 - 'mersenne-random-1.0.0.1'
 - 'tasty-hedgehog-0.2.0.0'
@@ -24,7 +23,7 @@ flags:
     use_sse2: true
 
 # Extra package databases containing global packages
-extra-package-dbs: []
+# extra-package-dbs: []
 
 # Control whether we use the GHC we find on the path
 # system-ghc: true
