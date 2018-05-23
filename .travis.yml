@@ -5,6 +5,7 @@
 #
 language: minimal
 dist: trusty
+sudo: required
 
 cache:
   timeout: 600
