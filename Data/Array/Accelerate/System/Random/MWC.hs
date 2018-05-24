@@ -104,7 +104,7 @@ uniformR bounds _ = R.uniformR bounds
 -- seeded from the system's fast source of pseudo-random numbers (see:
 -- 'R.createSystemRandom')
 --
-{-# INLINE randomArray #-}
+{-# INLINEABLE randomArray #-}
 randomArray :: (Shape sh, Elt e) => sh :~> e -> sh -> IO (Array sh e)
 randomArray f sh
   = do
@@ -114,7 +114,7 @@ randomArray f sh
 
 -- | Generate an array of random values using the supplied generator.
 --
-{-# INLINE randomArrayWith #-}
+{-# INLINEABLE randomArrayWith #-}
 randomArrayWith
     :: (Shape sh, Elt e)
     => GenIO
@@ -123,13 +123,13 @@ randomArrayWith
     -> IO (Array sh e)
 randomArrayWith gen f sh
   = do
-      adata  <- runRandomArray f sh gen
-      return $! Array (fromElt sh) adata
+      adata <- runRandomArray f sh gen
+      return $ adata `seq` Array (fromElt sh) adata
 
 
 -- Create a mutable array and fill it with random values
 --
-{-# NOINLINE runRandomArray #-}
+{-# INLINEABLE runRandomArray #-}
 runRandomArray
     :: (Shape sh, Elt e)
     => sh :~> e
