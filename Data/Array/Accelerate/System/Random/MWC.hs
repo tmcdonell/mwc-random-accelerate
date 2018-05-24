@@ -129,7 +129,7 @@ randomArrayWith gen f sh
 
 -- Create a mutable array and fill it with random values
 --
-{-# INLINE runRandomArray #-}
+{-# NOINLINE runRandomArray #-}
 runRandomArray
     :: (Shape sh, Elt e)
     => sh :~> e
