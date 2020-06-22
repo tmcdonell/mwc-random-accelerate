@@ -1,5 +1,5 @@
 name:                   mwc-random-accelerate
-version:                0.1.0.0
+version:                0.1.0.1
 synopsis:               Generate Accelerate arrays filled with high quality pseudorandom numbers
 description:
   Generate /Accelerate/ arrays filled with high-quality pseudorandom numbers.
@@ -43,7 +43,7 @@ benchmark bench-random
 
   build-depends:
         base                    >= 4.7 && < 5
-      , accelerate
+      , accelerate              >= 1.4 && < 1.5
       , criterion
       , mersenne-random
       , mwc-random

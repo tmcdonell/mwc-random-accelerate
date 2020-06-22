@@ -1,6 +1,8 @@
-{-# LANGUAGE BangPatterns  #-}
-{-# LANGUAGE RankNTypes    #-}
-{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE BangPatterns        #-}
+{-# LANGUAGE RankNTypes          #-}
+{-# LANGUAGE TypeOperators       #-}
+{-# LANGUAGE TypeApplications    #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 -- |
 -- Module:      : Data.Array.Accelerate.System.Random.MWC
 -- Copyright    : [2014..2015] Trevor L. McDonell
@@ -80,6 +82,7 @@ import qualified System.Random.MWC              as R
 import Data.Array.Accelerate                    as A
 import Data.Array.Accelerate.Array.Data         as A
 import Data.Array.Accelerate.Array.Sugar        as Sugar
+import qualified Data.Array.Accelerate.Array.Representation as Repr
 
 
 -- | A PRNG from indices to variates
@@ -124,14 +127,14 @@ randomArrayWith
 randomArrayWith gen f sh
   = do
       adata <- runRandomArray f sh gen
-      return $ adata `seq` Array (fromElt sh) adata
+      return $ adata `seq` Array (Repr.Array (fromElt sh) adata)
 
 
 -- Create a mutable array and fill it with random values
 --
 {-# INLINEABLE runRandomArray #-}
 runRandomArray
-    :: (Shape sh, Elt e)
+    :: forall sh e. (Shape sh, Elt e)
     => sh :~> e
     -> sh
     -> GenIO
@@ -139,12 +142,12 @@ runRandomArray
 runRandomArray f sh gen
   = do
       let n = Sugar.size sh
-      arr  <- newArrayData n
+      arr  <- newArrayData (eltType @e) n
       --
       let write !i
             | i P.>= n  = return ()
             | otherwise = do
-                unsafeWriteArrayData arr i . fromElt =<< f (Sugar.fromIndex sh i) gen
+                unsafeWriteArrayData (eltType @e) arr i . fromElt =<< f (Sugar.fromIndex sh i) gen
                 write (i+1)
       --
       write 0
