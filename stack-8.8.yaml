@@ -1,21 +1,20 @@
 # For more information, see: https://github.com/commercialhaskell/stack/blob/release/doc/yaml_configuration.md
 # vim: nospell
 
-resolver: lts-9.0
+resolver: lts-16.9
 
 packages:
-- '.'
+- .
 
 extra-deps:
-- 'accelerate-1.2.0.0'
-- 'hashtables-1.2.3.0'
-- 'mersenne-random-1.0.0.1'
-- 'tasty-hedgehog-0.2.0.0'
+- github: tmcdonell/accelerate
+  commit: ea73be67853bb01978308e3c1aec14484feff50c
 
 # Override default flag values for local packages and extra-deps
-flags:
-  mersenne-random:
-    use_sse2: true
+# flags: {}
+
+# Extra global and per-package GHC options
+# ghc-options: {}
 
 # Extra package databases containing global packages
 # extra-package-dbs: []

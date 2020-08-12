@@ -1,5 +1,4 @@
 {-# LANGUAGE BangPatterns        #-}
-{-# LANGUAGE RankNTypes          #-}
 {-# LANGUAGE TypeOperators       #-}
 {-# LANGUAGE TypeApplications    #-}
 {-# LANGUAGE ScopedTypeVariables #-}
@@ -75,14 +74,15 @@ module Data.Array.Accelerate.System.Random.MWC (
 
 ) where
 
-import Prelude                                  as P
-import System.Random.MWC                        hiding ( uniform, uniformR )
-import qualified System.Random.MWC              as R
+import Prelude                                                      as P
+import System.Random.MWC                                            hiding ( uniform, uniformR )
+import qualified System.Random.MWC                                  as R
 
-import Data.Array.Accelerate                    as A
-import Data.Array.Accelerate.Array.Data         as A
-import Data.Array.Accelerate.Array.Sugar        as Sugar
-import qualified Data.Array.Accelerate.Array.Representation as Repr
+import Data.Array.Accelerate.Array.Data
+import Data.Array.Accelerate.Sugar.Array
+import Data.Array.Accelerate.Sugar.Elt
+import Data.Array.Accelerate.Sugar.Shape
+import qualified Data.Array.Accelerate.Representation.Array         as R
 
 
 -- | A PRNG from indices to variates
@@ -127,7 +127,7 @@ randomArrayWith
 randomArrayWith gen f sh
   = do
       adata <- runRandomArray f sh gen
-      return $ adata `seq` Array (Repr.Array (fromElt sh) adata)
+      return $ adata `seq` Array (R.Array (fromElt sh) adata)
 
 
 -- Create a mutable array and fill it with random values
@@ -138,16 +138,16 @@ runRandomArray
     => sh :~> e
     -> sh
     -> GenIO
-    -> IO (MutableArrayData (EltRepr e))
+    -> IO (MutableArrayData (EltR e))
 runRandomArray f sh gen
   = do
-      let n = Sugar.size sh
-      arr  <- newArrayData (eltType @e) n
+      let n = size sh
+      arr  <- newArrayData (eltR @e) n
       --
       let write !i
             | i P.>= n  = return ()
             | otherwise = do
-                unsafeWriteArrayData (eltType @e) arr i . fromElt =<< f (Sugar.fromIndex sh i) gen
+                writeArrayData (eltR @e) arr i . fromElt =<< f (fromIndex sh i) gen
                 write (i+1)
       --
       write 0
