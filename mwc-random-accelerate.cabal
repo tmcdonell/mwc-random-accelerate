@@ -8,7 +8,7 @@ license-file:           LICENSE
 author:                 Trevor L. McDonell
 maintainer:             Trevor L. McDonell <trevor.mcdonell@gmail.com>
 -- copyright:
-category:               Data
+category:               Accelerate, Data
 build-type:             Simple
 -- extra-source-files:
 cabal-version:          >=1.10
