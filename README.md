@@ -14,11 +14,11 @@
 
 Generate Accelerate arrays filled with high-quality pseudorandom numbers.
 Currently this is based upon the [mwc-random][mwc-random] package to generate
-random numbers on the host. For details on Accelerate, refer to the [main
+random numbers _on the host_. For details on Accelerate, refer to the [main
 repository][accelerate].
 
 Contributions and bug reports are welcome!<br>
-Please feel free to contact me through GitHub or [gitter.im][gitter.im].
+Please feel free to contact me through [GitHub][accelerate] or [gitter.im][gitter.im].
 
   [accelerate]:         https://github.com/AccelerateHS/accelerate
   [mwc-random]:         http://hackage.haskell.org/package/mwc-random
