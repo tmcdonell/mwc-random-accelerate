@@ -1,14 +1,8 @@
 name:                   mwc-random-accelerate
 version:                0.2.0.0
 synopsis:               Generate Accelerate arrays filled with high quality pseudorandom numbers
-description:
-  Generate /Accelerate/ arrays filled with high-quality pseudorandom numbers.
-  .
-  Refer to the main /Accelerate/ package for more information:
-  <http://hackage.haskell.org/package/accelerate>
-  .
+description:            Please see the README on GitHub at <https://github.com/tmcdonell/mwc-random-accelerate#readme>
 tested-with:            GHC >= 8.6
-
 license:                BSD3
 license-file:           LICENSE
 author:                 Trevor L. McDonell
